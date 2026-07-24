@@ -4,18 +4,18 @@ func metaEN() SiteMeta {
 	return SiteMeta{
 		Lang:    string(LangEN),
 		Brand:   "Atra",
-		Tagline: "Teach the next generation to read the future.",
+		Tagline: "Structure creates behavior.",
 		Handle:  "@atra_futures",
 		Founder: "",
 		Tags:    nil,
 		Name: sharedName("In interpretive usage, Atra has been linked with spark and fire. That is background etymology for the institute name, not a headline claim. Atra is a cognitive laboratory for system dynamics and strategic foresight."),
-		HeroLead:      "Atra is, first, a school: children, parents, and teachers learning how systems behave and how futures are made. Under the same roof, an independent think tank and a laboratory carry that literacy into research and redesign.",
+		HeroLead:      "Atra is a cognitive laboratory for system dynamics and strategic foresight. Absolute randomness barely exists in complex systems; what we call accident is usually an admission of ignorance about structure. Structural literacy is built here.",
 		WelcomeLead:   "Why Atra exists",
-		WelcomeBody:   "Governments, cities, and organizations fail less from scarce data than from structural illiteracy. Atra starts where it matters most — in the classroom — and extends the same literacy into independent research and structural redesign. The work is methodical, human, and built to last beyond a single report.",
-		EcosystemLead: "One school, three doors",
-		EcosystemBody: "The school is the front door: futures literacy for children and adults. The think tank publishes independent structural research. The laboratory turns foresight into frameworks and redesign with organizations that need the analysis to leave the page.",
+		WelcomeBody:   "Governments, cities, and organizations fail less from scarce data than from structural illiteracy. Atra investigates feedback, delays, and mental models that lock systems into failure. The work is independent, methodical, and built for people who decide under pressure, not for decorative strategy theater.",
+		EcosystemLead: "Think tank, school, laboratory",
+		EcosystemBody: "Three arms, one project. The think tank publishes independent structural research. The school teaches system dynamics and foresight methods to children and adults. The laboratory builds frameworks and redesign with organizations that need the analysis to leave the page. Work with Atra means structural diagnostics and clear redesign paths.",
 		ManifestoLead: "We do not optimize broken systems.",
-		Manifesto:     "Complexity is not random; it is unmodeled. Atra exists to replace linear comfort with structural foresight — beginning with how the next generation is taught. Either we redesign systems from the root, or we continue to be crushed by their predictable collapse.",
+		Manifesto:     "Complexity is not random; it is unmodeled. Atra exists to replace linear comfort with structural foresight. Either we redesign systems from the root, or we continue to be crushed by their predictable collapse.",
 		Pillars: []Pillar{
 			{
 				ID:          "think-tank",
@@ -27,7 +27,7 @@ func metaEN() SiteMeta {
 				ID:          "school",
 				Title:       "School",
 				Subtitle:    "Children and adults",
-				Description: "Futures and system-dynamics literacy for kids and adults — taught with warmth and seriousness, so the next generation can read how systems behave and shape what comes next.",
+				Description: "Training in system dynamics, mental models, and foresight methods for kids and adults. Serious literacy without cartoon packaging or academic fog.",
 			},
 			{
 				ID:          "laboratory",

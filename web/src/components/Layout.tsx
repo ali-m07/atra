@@ -59,8 +59,8 @@ export function Header() {
               {link.label}
             </NavLink>
           ))}
-          <Link to="/philosophy" className="nav-cta" onClick={() => setOpen(false)}>
-            {ui.enterSchool}
+          <Link to="/methodology" className="nav-cta" onClick={() => setOpen(false)}>
+            {ui.workWithAtra}
           </Link>
         </nav>
 

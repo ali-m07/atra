@@ -24,11 +24,6 @@ export type UiCopy = {
   laboratory: string
   featured: string
   heroLabel: string
-  heroLabelSchool: string
-  schoolForWhom: string
-  schoolWhatTheyLearn: string
-  schoolHowToStart: string
-  researchCta: string
   schoolStartBody: string
   comingSoon: string
   loading: string
@@ -48,7 +43,7 @@ export const UI: Record<Locale, UiCopy> = {
     framework: 'Method',
     whitepaper: 'Whitepaper',
     enterLab: 'Enter the lab',
-    enterSchool: 'Enter the school — for parents & teachers',
+    enterSchool: 'Explore the school',
     workWithAtra: 'Work with Atra',
     menu: 'Menu',
     readPhilosophy: 'About Atra',
@@ -66,13 +61,8 @@ export const UI: Record<Locale, UiCopy> = {
     laboratory: 'Laboratory',
     featured: 'From the lab',
     heroLabel: 'Cognitive laboratory',
-    heroLabelSchool: 'The Futures School',
-    schoolForWhom: 'For parents, teachers & students',
-    schoolWhatTheyLearn: 'What they learn',
-    schoolHowToStart: 'How to start',
-    researchCta: 'Read the research',
     schoolStartBody:
-      'The school is for children and adults who want real literacy in systems and foresight — taught with warmth and seriousness. Start with the method and whitepaper, then walk the school path, or work with Atra when an organization needs structural diagnostics.',
+      'The school is for children and adults who want real literacy in systems and foresight. Start with the method and whitepaper, then enter the school path or work with Atra when an organization needs structural diagnostics.',
     comingSoon: 'Coming soon',
     loading: 'Loading Atra…',
     loadError: 'Unable to load Atra content from the API.',
@@ -90,7 +80,7 @@ export const UI: Record<Locale, UiCopy> = {
     framework: 'روش',
     whitepaper: 'سپیدنامه',
     enterLab: 'ورود به آزمایشگاه',
-    enterSchool: 'ورود به مدرسه — برای والدین و معلمان',
+    enterSchool: 'کاوش مدرسه',
     workWithAtra: 'همکاری با آترا',
     menu: 'منو',
     readPhilosophy: 'درباره آترا',
@@ -108,13 +98,8 @@ export const UI: Record<Locale, UiCopy> = {
     laboratory: 'آزمایشگاه',
     featured: 'از آزمایشگاه',
     heroLabel: 'آزمایشگاه شناختی',
-    heroLabelSchool: 'مدرسهٔ آینده‌ها',
-    schoolForWhom: 'برای والدین، معلمان و دانش‌آموزان',
-    schoolWhatTheyLearn: 'چه می‌آموزند',
-    schoolHowToStart: 'چطور شروع کنیم',
-    researchCta: 'خواندن پژوهش',
     schoolStartBody:
-      'مدرسه برای کودکان و بزرگسالانی است که سواد واقعی سیستم‌ها و آینده‌نگری می‌خواهند — با گرمای انسانی و جدیت واقعی. از روش و سپیدنامه شروع کنید، سپس مسیر مدرسه را بگیرید، یا وقتی سازمان به تشخیص ساختاری نیاز دارد با آترا کار کنید.',
+      'مدرسه برای کودکان و بزرگسالانی است که سواد واقعی سیستم‌ها و آینده‌نگری می‌خواهند. از روش و سپیدنامه شروع کنید، سپس مسیر مدرسه را بگیرید یا وقتی سازمان به تشخیص ساختاری نیاز دارد با آترا کار کنید.',
     comingSoon: 'به‌زودی',
     loading: 'در حال بارگذاری آترا…',
     loadError: 'بارگذاری محتوای آترا از رابط برنامه‌نویسی ممکن نشد.',
