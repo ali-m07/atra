@@ -17,18 +17,15 @@ type OrbitState = {
   moved: boolean
 }
 
-const IDLE_PITCH = -6
-const MAX_PITCH = 28
+const IDLE_PITCH = -8
+const MAX_PITCH = 32
 const DRAG_YAW = 0.48
-const DRAG_PITCH = 0.24
-/** Premium turntable: ~0.22°/frame ≈ 13°/s ≈ full spin in ~27s */
-const IDLE_SPIN = 0.22
-/** Ease angular velocity back onto the idle turntable path after a nudge */
-const SPIN_SPRING = 0.055
+const DRAG_PITCH = 0.28
+/** ~0.28°/frame ≈ 17°/s ≈ full spin in ~21s — livelier turntable */
+const IDLE_SPIN = 0.28
+const SPIN_SPRING = 0.06
 const PITCH_SPRING = 0.1
 const VY_DAMP = 0.88
-
-const EARTH_MAP = `${import.meta.env.BASE_URL}earth-day.jpg`
 
 function clamp(n: number, min: number, max: number) {
   return Math.min(max, Math.max(min, n))
@@ -40,14 +37,15 @@ function wrapDeg(n: number) {
 }
 
 /**
- * Round interactive Earth globe (never CSS rotateX/Y — that pancakes a 2D disc).
+ * Real 3D Earth (Three.js SphereGeometry) inside the laptop hero frame.
  * Continuous idle yaw (turntable); drag nudges orientation; release springs
  * velocity back onto the idle spin path — never freezes at the drag angle.
  */
 export function GlobeOrbit({ hint }: GlobeOrbitProps) {
   const shellRef = useRef<HTMLDivElement>(null)
+  const canvasRef = useRef<HTMLCanvasElement>(null)
   const stateRef = useRef<OrbitState>({
-    yaw: 20,
+    yaw: 40,
     pitch: IDLE_PITCH,
     vx: IDLE_SPIN,
     vy: 0,
@@ -61,21 +59,6 @@ export function GlobeOrbit({ hint }: GlobeOrbitProps) {
   const [hasDragged, setHasDragged] = useState(false)
   const reducedRef = useRef(false)
 
-  const paint = () => {
-    const shell = shellRef.current
-    const s = stateRef.current
-    if (!shell) return
-
-    const posY = 50 + s.pitch * 0.28
-    const lightX = 34 - s.pitch * 0.12
-    const lightY = 30 + s.pitch * 0.4
-    // Equirectangular wrap: 0–360° → 0–100% background-position-x
-    shell.style.setProperty('--globe-map-x', `${(s.yaw / 360) * 100}%`)
-    shell.style.setProperty('--globe-pos-y', `${clamp(posY, 38, 62)}%`)
-    shell.style.setProperty('--globe-light-x', `${clamp(lightX, 24, 44)}%`)
-    shell.style.setProperty('--globe-light-y', `${clamp(lightY, 18, 46)}%`)
-  }
-
   useEffect(() => {
     reducedRef.current = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     const s = stateRef.current
@@ -83,42 +66,42 @@ export function GlobeOrbit({ hint }: GlobeOrbitProps) {
       s.vx = 0
       s.vy = 0
     }
-    paint()
   }, [])
 
   useEffect(() => {
-    let raf = 0
+    const shell = shellRef.current
+    const canvas = canvasRef.current
+    if (!shell || !canvas) return
 
-    const tick = () => {
-      const s = stateRef.current
-      const reduced = reducedRef.current
+    let cancelled = false
+    let destroy: (() => void) | undefined
 
-      if (!s.dragging && !reduced) {
-        // Spring yaw rate back to continuous turntable spin (keeps spinning —
-        // never locks forever on the angle the user left it at).
-        s.vx += (IDLE_SPIN - s.vx) * SPIN_SPRING
-        s.vy *= VY_DAMP
-        if (Math.abs(s.vy) < 0.002) s.vy = 0
-
-        s.yaw = wrapDeg(s.yaw + s.vx)
-        s.pitch = clamp(s.pitch + s.vy, -MAX_PITCH, MAX_PITCH)
-        s.pitch += (IDLE_PITCH - s.pitch) * PITCH_SPRING
-        if (Math.abs(s.pitch - IDLE_PITCH) < 0.04) s.pitch = IDLE_PITCH
-
-        paint()
-      } else if (!s.dragging && reduced) {
-        if (Math.abs(s.pitch - IDLE_PITCH) > 0.001) {
-          s.pitch = IDLE_PITCH
-          paint()
-        }
+    void import('./globeScene').then(({ createGlobeScene }) => {
+      if (cancelled || !shellRef.current || !canvasRef.current) return
+      destroy = createGlobeScene({
+        canvas: canvasRef.current,
+        shell: shellRef.current,
+        getState: () => stateRef.current,
+        idlePitch: IDLE_PITCH,
+        maxPitch: MAX_PITCH,
+        idleSpin: IDLE_SPIN,
+        spinSpring: SPIN_SPRING,
+        pitchSpring: PITCH_SPRING,
+        vyDamp: VY_DAMP,
+        reducedMotion: () => reducedRef.current,
+        wrapDeg,
+        clamp,
+      })
+      if (cancelled) {
+        destroy()
+        destroy = undefined
       }
+    })
 
-      raf = requestAnimationFrame(tick)
+    return () => {
+      cancelled = true
+      destroy?.()
     }
-
-    paint()
-    raf = requestAnimationFrame(tick)
-    return () => cancelAnimationFrame(raf)
   }, [])
 
   useEffect(() => {
@@ -156,7 +139,6 @@ export function GlobeOrbit({ hint }: GlobeOrbitProps) {
       s.yaw = wrapDeg(s.yaw + yawDelta)
       s.pitch = clamp(s.pitch + pitchDelta, -MAX_PITCH, MAX_PITCH)
 
-      // Capture flick velocity so release eases from the nudge into idle spin
       const scale = reducedRef.current ? 0 : 14 / dt
       s.vx = yawDelta * scale
       s.vy = pitchDelta * scale
@@ -164,7 +146,6 @@ export function GlobeOrbit({ hint }: GlobeOrbitProps) {
       s.lastX = e.clientX
       s.lastY = e.clientY
       s.lastT = now
-      paint()
     }
 
     const endDrag = (e: PointerEvent) => {
@@ -179,11 +160,9 @@ export function GlobeOrbit({ hint }: GlobeOrbitProps) {
         s.vx = 0
         s.vy = 0
       } else if (!s.moved) {
-        // Tap without drag: resume turntable immediately
         s.vx = IDLE_SPIN
         s.vy = 0
       }
-      // Else: keep flick vx/vy — tick springs them back onto IDLE_SPIN
 
       try {
         shell.releasePointerCapture(e.pointerId)
@@ -215,16 +194,7 @@ export function GlobeOrbit({ hint }: GlobeOrbitProps) {
         title={hint}
       >
         <div className="globe-orbit__atmosphere" aria-hidden="true" />
-        <div className="globe-orbit__ball">
-          <div
-            className="globe-orbit__texture"
-            style={{ backgroundImage: `url(${EARTH_MAP})` }}
-            aria-hidden="true"
-          />
-          <div className="globe-orbit__texture-shade" aria-hidden="true" />
-          <div className="globe-orbit__specular" aria-hidden="true" />
-          <div className="globe-orbit__rim" aria-hidden="true" />
-        </div>
+        <canvas ref={canvasRef} className="globe-orbit__canvas" aria-hidden="true" />
       </div>
       <p className={`globe-orbit__hint${hasDragged ? ' has-dragged' : ''}`} aria-hidden="true">
         {hint}
