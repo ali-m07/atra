@@ -14,8 +14,7 @@ type OrbitState = {
   lastY: number
   lastT: number
   moved: boolean
-  wasPlaying: boolean
-  lastSeek: number
+  idle: boolean
 }
 
 const IDLE_PITCH = -6
@@ -25,8 +24,10 @@ const DRAG_PITCH = 0.24
 const INERTIA = 0.92
 const STOP = 0.04
 const PITCH_SNAP = 0.08
-const SEC_PER_DEG = 0.014
-const SEEK_EPS = 0.002
+/** Degrees per frame at ~60fps ≈ gentle Earth spin */
+const IDLE_SPIN = 0.08
+
+const EARTH_MAP = `${import.meta.env.BASE_URL}earth-day.jpg`
 
 function clamp(n: number, min: number, max: number) {
   return Math.min(max, Math.max(min, n))
@@ -37,21 +38,14 @@ function wrapDeg(n: number) {
   return r < 0 ? r + 360 : r
 }
 
-function wrapTime(t: number, duration: number) {
-  if (!duration || !Number.isFinite(duration)) return 0
-  const r = t % duration
-  return r < 0 ? r + duration : r
-}
-
 /**
- * Round interactive globe (never CSS rotateX/Y — that pancakes a 2D disc).
- * Horizontal drag scrubs the Earth video (reorient). Vertical drag tilts light only.
+ * Round interactive Earth globe (never CSS rotateX/Y — that pancakes a 2D disc).
+ * Equirectangular NASA map; horizontal drag reorients; vertical drag tilts light.
  */
 export function GlobeOrbit({ hint }: GlobeOrbitProps) {
   const shellRef = useRef<HTMLDivElement>(null)
-  const videoRef = useRef<HTMLVideoElement>(null)
   const stateRef = useRef<OrbitState>({
-    yaw: 0,
+    yaw: 20,
     pitch: IDLE_PITCH,
     vx: 0,
     vy: 0,
@@ -60,57 +54,30 @@ export function GlobeOrbit({ hint }: GlobeOrbitProps) {
     lastY: 0,
     lastT: 0,
     moved: false,
-    wasPlaying: true,
-    lastSeek: -1,
+    idle: true,
   })
   const [grabbing, setGrabbing] = useState(false)
   const [hasDragged, setHasDragged] = useState(false)
   const reducedRef = useRef(false)
 
-  const paint = (scrub: boolean) => {
+  const paint = () => {
     const shell = shellRef.current
-    const video = videoRef.current
     const s = stateRef.current
     if (!shell) return
 
     const posY = 50 + s.pitch * 0.28
     const lightX = 34 - s.pitch * 0.12
     const lightY = 30 + s.pitch * 0.4
+    // Equirectangular wrap: 0–360° → 0–100% background-position-x
+    shell.style.setProperty('--globe-map-x', `${(s.yaw / 360) * 100}%`)
     shell.style.setProperty('--globe-pos-y', `${clamp(posY, 38, 62)}%`)
     shell.style.setProperty('--globe-light-x', `${clamp(lightX, 24, 44)}%`)
     shell.style.setProperty('--globe-light-y', `${clamp(lightY, 18, 46)}%`)
-
-    if (scrub && video && video.duration) {
-      const next = wrapTime(s.yaw * SEC_PER_DEG, video.duration)
-      if (Math.abs(next - s.lastSeek) >= SEEK_EPS) {
-        try {
-          video.currentTime = next
-          s.lastSeek = next
-        } catch {
-          /* seek before ready */
-        }
-      }
-    }
   }
 
   useEffect(() => {
     reducedRef.current = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    const video = videoRef.current
-    if (!video) return
-
-    if (reducedRef.current) {
-      video.pause()
-      video.removeAttribute('autoplay')
-      paint(false)
-      return
-    }
-
-    const play = () => {
-      void video.play().catch(() => {})
-    }
-    play()
-    video.addEventListener('loadeddata', play)
-    return () => video.removeEventListener('loadeddata', play)
+    paint()
   }, [])
 
   useEffect(() => {
@@ -118,7 +85,6 @@ export function GlobeOrbit({ hint }: GlobeOrbitProps) {
 
     const tick = () => {
       const s = stateRef.current
-      const video = videoRef.current
       const reduced = reducedRef.current
 
       if (!s.dragging) {
@@ -129,33 +95,25 @@ export function GlobeOrbit({ hint }: GlobeOrbitProps) {
           s.pitch = clamp(s.pitch + s.vy, -MAX_PITCH, MAX_PITCH)
           s.vx *= INERTIA
           s.vy *= INERTIA
-          if (video) video.pause()
-          paint(true)
+          paint()
         } else {
           if (s.vx !== 0 || s.vy !== 0) {
             s.vx = 0
             s.vy = 0
           }
 
-          // Soft snap pitch back toward idle (sphere stays round)
           if (Math.abs(s.pitch - IDLE_PITCH) > 0.15) {
             s.pitch += (IDLE_PITCH - s.pitch) * (reduced ? 1 : PITCH_SNAP)
-            paint(false)
+            paint()
           } else if (Math.abs(s.pitch - IDLE_PITCH) > 0.001) {
             s.pitch = IDLE_PITCH
-            paint(false)
+            paint()
           }
 
-          // Resume idle Earth motion after release
-          if (
-            video &&
-            s.wasPlaying &&
-            !reduced &&
-            video.paused &&
-            Math.abs(s.vx) <= STOP &&
-            Math.abs(s.vy) <= STOP
-          ) {
-            void video.play().catch(() => {})
+          // Slow idle Earth rotation when not dragging
+          if (s.idle && !reduced) {
+            s.yaw = wrapDeg(s.yaw + IDLE_SPIN)
+            paint()
           }
         }
       }
@@ -163,7 +121,7 @@ export function GlobeOrbit({ hint }: GlobeOrbitProps) {
       raf = requestAnimationFrame(tick)
     }
 
-    paint(false)
+    paint()
     raf = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(raf)
   }, [])
@@ -175,22 +133,14 @@ export function GlobeOrbit({ hint }: GlobeOrbitProps) {
     const onPointerDown = (e: PointerEvent) => {
       if (e.button !== 0 && e.pointerType === 'mouse') return
       const s = stateRef.current
-      const video = videoRef.current
       s.dragging = true
+      s.idle = false
       s.moved = false
       s.vx = 0
       s.vy = 0
       s.lastX = e.clientX
       s.lastY = e.clientY
       s.lastT = performance.now()
-      s.wasPlaying = Boolean(video && !video.paused)
-      if (video) {
-        if (video.duration) {
-          s.yaw = wrapDeg(video.currentTime / SEC_PER_DEG)
-          s.lastSeek = video.currentTime
-        }
-        video.pause()
-      }
       setGrabbing(true)
       shell.classList.add('is-dragging')
       shell.setPointerCapture(e.pointerId)
@@ -219,13 +169,14 @@ export function GlobeOrbit({ hint }: GlobeOrbitProps) {
       s.lastX = e.clientX
       s.lastY = e.clientY
       s.lastT = now
-      paint(true)
+      paint()
     }
 
     const endDrag = (e: PointerEvent) => {
       const s = stateRef.current
       if (!s.dragging) return
       s.dragging = false
+      s.idle = true
       setGrabbing(false)
       shell.classList.remove('is-dragging')
       if (s.moved) setHasDragged(true)
@@ -263,19 +214,11 @@ export function GlobeOrbit({ hint }: GlobeOrbitProps) {
         title={hint}
       >
         <div className="globe-orbit__ball">
-          <video
-            ref={videoRef}
-            className="globe-orbit__video"
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-            poster="/hero-poster.jpg"
-            draggable={false}
-          >
-            <source src="/hero.mp4" type="video/mp4" />
-          </video>
+          <div
+            className="globe-orbit__texture"
+            style={{ backgroundImage: `url(${EARTH_MAP})` }}
+            aria-hidden="true"
+          />
           <div className="globe-orbit__texture-shade" aria-hidden="true" />
           <div className="globe-orbit__specular" aria-hidden="true" />
           <div className="globe-orbit__rim" aria-hidden="true" />
