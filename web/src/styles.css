@@ -598,7 +598,7 @@ html[dir='rtl'] .hero-cinematic__brand {
   height: 42%;
   translate: -50% -50%;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(120, 170, 255, 0.22), transparent 72%);
+  background: radial-gradient(circle, rgba(120, 170, 255, 0.12), transparent 72%);
   filter: blur(16px);
   z-index: 0;
   pointer-events: none;
@@ -681,20 +681,20 @@ html[dir='rtl'] .hero-cinematic__brand {
   opacity: 0;
 }
 
-/* Soft atmospheric halo outside the sphere — rim glow only, not a filled disc */
+/* Soft atmospheric halo outside the sphere — thin rim only */
 .globe-orbit__atmosphere {
   position: absolute;
-  inset: -8%;
+  inset: -6%;
   border-radius: 50%;
   pointer-events: none;
   background:
     radial-gradient(
       circle at 50% 50%,
-      transparent 58%,
-      rgba(120, 175, 255, 0.16) 72%,
-      transparent 82%
+      transparent 64%,
+      rgba(140, 185, 255, 0.12) 78%,
+      transparent 88%
     );
-  filter: blur(4px);
+  filter: blur(3px);
   z-index: 0;
   animation: globe-atmosphere-breathe 8s var(--ease) infinite;
 }
