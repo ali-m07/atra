@@ -7,7 +7,7 @@ import { LocaleProvider } from './locale/LocaleContext'
 export default function App() {
   return (
     <LocaleProvider>
-      <BrowserRouter>
+      <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, '') || '/'}>
         <Header />
         <main>
           <Routes>

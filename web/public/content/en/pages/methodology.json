@@ -1,0 +1,60 @@
+{
+  "slug": "methodology",
+  "title": "Research Framework",
+  "headline": "How Atra analyzes complex systems",
+  "lead": "Our method rejects linear description. We decode the structural architecture of socio-technical systems so decisions can be made with eyes open.",
+  "sections": [
+    {
+      "title": "System Dynamics & Feedback Mapping",
+      "lead": "Urban gridlock, economic stagnation, and infrastructure collapse are driven by feedback, not isolated incidents.",
+      "bullets": [
+        {
+          "label": "Reinforcing loops (R)",
+          "text": "Vicious cycles where symptom management accelerates collapse."
+        },
+        {
+          "label": "Balancing loops (B)",
+          "text": "Constraints that try to stabilize behavior, and where delayed regulation fails."
+        },
+        {
+          "label": "Delay analysis",
+          "text": "Temporal gaps that create false signals for decision-makers."
+        }
+      ]
+    },
+    {
+      "title": "Paradigm & Mental Model Diagnostics",
+      "lead": "Systems run on the mental models of their designers. We interrogate those assumptions.",
+      "bullets": [
+        {
+          "label": "Illusion of randomness",
+          "text": "Remove labels like unprecedented or accidental; reveal structural outputs."
+        },
+        {
+          "label": "Goal reversal",
+          "text": "Expose short-term optimizations that destroy long-term viability."
+        },
+        {
+          "label": "Constraint shifting",
+          "text": "Show how linear fixes move bottlenecks instead of resolving them."
+        }
+      ]
+    },
+    {
+      "title": "Strategic Foresight & Scenarios",
+      "lead": "Foresight at Atra maps the structural boundaries of possibility. It does not sell a single prediction.",
+      "bullets": [
+        {
+          "label": "Induced demand",
+          "text": "Track how behavior nullifies technical interventions."
+        },
+        {
+          "label": "Interdependency cascades",
+          "text": "Evaluate how disruption in one domain spreads non-linearly into others."
+        }
+      ]
+    }
+  ],
+  "handle": "@atra_futures",
+  "lang": "en"
+}

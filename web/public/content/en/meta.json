@@ -1,0 +1,44 @@
+{
+  "brand": "Atra",
+  "tagline": "Decode the structure of complex systems.",
+  "handle": "@atra_futures",
+  "founder": "",
+  "tags": null,
+  "pillars": [
+    {
+      "id": "think-tank",
+      "title": "Think Tank",
+      "subtitle": "Independent research",
+      "description": "Objective diagnostics of urban paradoxes, governance failure, economic feedback, and policy blind spots. Research decision-makers can use when the stakes are real."
+    },
+    {
+      "id": "school",
+      "title": "School",
+      "subtitle": "Children and adults",
+      "description": "Training in system dynamics, mental models, and foresight methods for kids and adults. Serious literacy without cartoon packaging or academic fog."
+    },
+    {
+      "id": "laboratory",
+      "title": "Laboratory",
+      "subtitle": "Frameworks and redesign",
+      "description": "Turning foresight into scenarios, frameworks, and structural redesign for organizations that refuse to stay trapped in their own feedback."
+    }
+  ],
+  "manifesto": "Complexity is not random; it is unmodeled. Atra exists to replace linear comfort with structural foresight. Either we redesign systems from the root, or we continue to be crushed by their predictable collapse.",
+  "welcomeLead": "Why Atra exists",
+  "welcomeBody": "Governments, cities, and organizations fail less from scarce data than from structural illiteracy. Atra investigates feedback, delays, and mental models that lock systems into failure. The work is independent, methodical, and built for people who decide under pressure, not for decorative strategy theater.",
+  "name": {
+    "wordEn": "Atra",
+    "wordFa": "آترا",
+    "glossEn": "spark · fire",
+    "glossFa": "جرقه · آتش",
+    "visionEn": "A fiery future",
+    "visionFa": "آینده‌ای آتشین",
+    "body": "In interpretive usage, Atra has been linked with spark and fire. That is background etymology for the institute name, not a headline claim. Atra is a cognitive laboratory for system dynamics and strategic foresight."
+  },
+  "heroLead": "Atra is a cognitive laboratory for system dynamics and strategic foresight. We study how cities, organizations, and economies actually behave under pressure, then turn that reading into research, education, and practical redesign. If you need structural literacy rather than another surface narrative, this is the door.",
+  "ecosystemLead": "Think tank, school, laboratory",
+  "ecosystemBody": "Three arms, one project. The think tank publishes independent structural research. The school teaches system dynamics and foresight methods to children and adults. The laboratory builds frameworks and redesign with organizations that need the analysis to leave the page. Work with Atra means structural diagnostics and clear redesign paths.",
+  "manifestoLead": "We do not optimize broken systems.",
+  "lang": "en"
+}

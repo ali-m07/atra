@@ -1,0 +1,50 @@
+{
+  "slug": "whitepaper",
+  "title": "Whitepaper",
+  "headline": "The Architecture of Reality",
+  "lead": "Modern governance and strategy fail less from missing data than from a systemic literacy crisis. This whitepaper outlines Atra's analytical architecture.",
+  "sections": [
+    {
+      "title": "The Fallacy of Linear Modeling",
+      "body": "Traditional frameworks treat complex systems as linear machines. When models collapse, leaders blame randomness or error. Atra rejects that illusion. Rooted in system dynamics, foresight, and structural diagnostics, we show that so-called accidents are often deterministic outputs of unmodeled loops and delays."
+    },
+    {
+      "title": "From Symptoms to Structure",
+      "lead": "Institutions patch symptoms. We investigate network architecture.",
+      "bullets": [
+        {
+          "label": "Linear fallacy",
+          "text": "Assuming proportional outcomes from isolated interventions."
+        },
+        {
+          "label": "Deterministic reality",
+          "text": "Interventions without structural modeling trigger compensatory feedback that can worsen the pathology."
+        }
+      ]
+    },
+    {
+      "title": "Methodological Instruments",
+      "lead": "Three instruments strip noise and expose causality.",
+      "bullets": [
+        {
+          "label": "Feedback topology",
+          "text": "Map reinforcing and balancing structures to anticipate tipping points."
+        },
+        {
+          "label": "Paradigm diagnostics",
+          "text": "Audit governing assumptions of system designers."
+        },
+        {
+          "label": "Demand and delay modeling",
+          "text": "Quantify adaptation and lag that neutralize superficial fixes."
+        }
+      ]
+    },
+    {
+      "title": "Mandate for Structural Redesign",
+      "body": "Atra does not optimize broken systems into slower failure. We provide the cognitive tools to redesign them, or to accept their predictable collapse with eyes open."
+    }
+  ],
+  "handle": "@atra_futures",
+  "lang": "en"
+}

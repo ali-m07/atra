@@ -25,7 +25,7 @@ npm run dev
 
 App runs on `http://localhost:5174` and proxies `/api` to the Go server.
 
-### Production
+### Production (Go serves API + static)
 
 ```bash
 cd web && npm run build
@@ -33,6 +33,14 @@ cd ../server && ATRA_STATIC=../web/dist go run ./cmd/atra
 ```
 
 Then open `http://localhost:8080`.
+
+### GitHub Pages
+
+Push to `main` deploys the Vite build via Actions to:
+
+**https://ali-m07.github.io/atra/**
+
+Pages serves static files only. Content is exported from the Go package into `web/public/content/` at build time (`VITE_STATIC=true`). The live Go API is not required for the Pages site. To point the frontend at a hosted API later, set `VITE_API_URL` in the workflow.
 
 ## API
 
