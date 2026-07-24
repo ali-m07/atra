@@ -24,7 +24,6 @@ export type UiCopy = {
   laboratory: string
   featured: string
   heroLabel: string
-  globeHint: string
   schoolStartBody: string
   comingSoon: string
   loading: string
@@ -62,7 +61,6 @@ export const UI: Record<Locale, UiCopy> = {
     laboratory: 'Laboratory',
     featured: 'From the lab',
     heroLabel: 'Cognitive laboratory',
-    globeHint: 'Drag',
     schoolStartBody:
       'The school is for children and adults who want real literacy in systems and foresight. Start with the method and whitepaper, then enter the school path or work with Atra when an organization needs structural diagnostics.',
     comingSoon: 'Coming soon',
@@ -100,7 +98,6 @@ export const UI: Record<Locale, UiCopy> = {
     laboratory: 'آزمایشگاه',
     featured: 'از آزمایشگاه',
     heroLabel: 'آزمایشگاه شناختی',
-    globeHint: 'بکش',
     schoolStartBody:
       'مدرسه برای کودکان و بزرگسالانی است که سواد واقعی سیستم‌ها و آینده‌نگری می‌خواهند. از روش و سپیدنامه شروع کنید، سپس مسیر مدرسه را بگیرید یا وقتی سازمان به تشخیص ساختاری نیاز دارد با آترا کار کنید.',
     comingSoon: 'به‌زودی',

@@ -4,7 +4,7 @@ import { api } from '../api'
 import type { SiteMeta } from '../types'
 import { useLocale } from '../locale/LocaleContext'
 import { Reveal } from '../components/Reveal'
-import { GlobeOrbit } from '../components/GlobeOrbit'
+import { HeroSystems } from '../components/HeroSystems'
 
 export function HomePage() {
   const { locale, ui, isFa } = useLocale()
@@ -57,7 +57,11 @@ export function HomePage() {
     <div className={`home page-motion${ready ? ' is-ready' : ''}`}>
       <section className="hero-cinematic">
         <div className="hero-cinematic__atmosphere" aria-hidden="true">
+          <div className="hero-cinematic__field">
+            <HeroSystems />
+          </div>
           <div className="hero-cinematic__orb" />
+          <div className="hero-cinematic__orb hero-cinematic__orb--warm" />
           <div className="hero-cinematic__grain" />
         </div>
 
@@ -78,28 +82,12 @@ export function HomePage() {
               {meta.heroLead}
             </p>
             <div className="cta-row anim-item" style={{ '--i': 3 } as CSSProperties}>
-              <Link className="btn btn-solid" to="/whitepaper">
-                {ui.openWhitepaper}
+              <Link className="btn btn-solid" to="/philosophy">
+                {ui.readPhilosophy}
               </Link>
               <Link className="btn btn-ghost" to="/methodology">
                 {ui.workWithAtra}
               </Link>
-            </div>
-          </div>
-
-          <div className="hero-cinematic__visual anim-item" style={{ '--i': 4 } as CSSProperties}>
-            <div className="hero-device">
-              <div className="hero-device__glow" aria-hidden="true" />
-              <div className="hero-device__lid">
-                <div className="hero-device__bezel">
-                  <div className="hero-device__screen">
-                    <GlobeOrbit hint={ui.globeHint} />
-                  </div>
-                </div>
-              </div>
-              <div className="hero-device__base" aria-hidden="true">
-                <div className="hero-device__track" />
-              </div>
             </div>
           </div>
         </div>
