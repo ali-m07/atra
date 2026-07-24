@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 640" fill="none" role="img" aria-hidden="true">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#D7EAF7"/>
+      <stop offset="42%" stop-color="#EEF5FA"/>
+      <stop offset="100%" stop-color="#FAFBFC"/>
+    </linearGradient>
+    <linearGradient id="land" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#C5D9E8" stop-opacity="0.35"/>
+      <stop offset="55%" stop-color="#A8C5DA" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#D7EAF7" stop-opacity="0.15"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.75"/>
+      <stop offset="100%" stop-color="#BFD8EB" stop-opacity="0.35"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="960" height="640" fill="url(#sky)"/>
+
+  <!-- distant horizon band -->
+  <ellipse cx="720" cy="340" rx="280" ry="90" fill="#F4C98B" fill-opacity="0.18"/>
+  <path d="M0 360 C180 330 320 350 480 345 C680 338 820 310 960 330 L960 640 L0 640 Z" fill="url(#land)"/>
+
+  <!-- quiet architecture: learning space facade -->
+  <g transform="translate(520 210)">
+    <rect x="0" y="40" width="300" height="210" rx="4" fill="#FFFFFF" fill-opacity="0.55" stroke="#1B6CA8" stroke-opacity="0.12"/>
+    <rect x="28" y="68" width="110" height="88" rx="3" fill="url(#glass)" stroke="#1B6CA8" stroke-opacity="0.22"/>
+    <rect x="162" y="68" width="110" height="88" rx="3" fill="url(#glass)" stroke="#1B6CA8" stroke-opacity="0.22"/>
+    <path d="M28 112 H138 M83 68 V156 M162 112 H272 M217 68 V156" stroke="#1B6CA8" stroke-opacity="0.18" stroke-width="1.5"/>
+    <!-- table plane -->
+    <rect x="48" y="198" width="204" height="8" rx="2" fill="#1F2933" fill-opacity="0.12"/>
+    <rect x="56" y="206" width="8" height="22" fill="#1F2933" fill-opacity="0.08"/>
+    <rect x="236" y="206" width="8" height="22" fill="#1F2933" fill-opacity="0.08"/>
+    <!-- three seated silhouettes  restrained, not cartoon -->
+    <g fill="#1B6CA8" fill-opacity="0.55">
+      <ellipse cx="92" cy="178" rx="9" ry="9"/>
+      <path d="M78 188 C78 182 106 182 106 188 L108 214 H76 Z"/>
+      <ellipse cx="148" cy="176" rx="9" ry="9"/>
+      <path d="M134 186 C134 180 162 180 162 186 L164 214 H132 Z"/>
+      <ellipse cx="204" cy="178" rx="8.5" ry="8.5"/>
+      <path d="M191 188 C191 182 217 182 217 188 L218 214 H190 Z"/>
+    </g>
+    <!-- open book on table -->
+    <path d="M128 196 C138 190 158 190 168 196 L168 202 C158 198 138 198 128 202 Z" fill="#1B6CA8" fill-opacity="0.35"/>
+    <path d="M168 196 C178 190 198 190 208 196 L208 202 C198 198 178 198 168 202 Z" fill="#1B6CA8" fill-opacity="0.28"/>
+  </g>
+
+  <!-- soft floor shadow -->
+  <ellipse cx="670" cy="470" rx="190" ry="18" fill="#1F2933" fill-opacity="0.05"/>
+</svg>

@@ -1,0 +1,11 @@
+# Dependencies
+/node_modules
+/web/node_modules
+/web/dist
+/server/atra
+*.exe
+.DS_Store
+.env
+.env.*
+!.env.example
+posts-atra-55-roz.md
