@@ -4,7 +4,6 @@ import { api } from '../api'
 import type { SiteMeta } from '../types'
 import { useLocale } from '../locale/LocaleContext'
 import { Reveal } from '../components/Reveal'
-import { HeroSystems } from '../components/HeroSystems'
 
 export function HomePage() {
   const { locale, ui, isFa } = useLocale()
@@ -55,43 +54,80 @@ export function HomePage() {
 
   return (
     <div className={`home page-motion${ready ? ' is-ready' : ''}`}>
-      <section className="hero-cinematic">
-        <div className="hero-cinematic__atmosphere" aria-hidden="true">
-          <div className="hero-cinematic__field">
-            <HeroSystems />
-          </div>
-          <div className="hero-cinematic__orb" />
-          <div className="hero-cinematic__orb hero-cinematic__orb--warm" />
-          <div className="hero-cinematic__grain" />
-        </div>
+      <section className="hero-warm">
+        {/* Drop a photo at web/public/hero-learning.jpg to fill this layer.
+            Until then the warm gradient fallback below carries the hero. */}
+        <div className="hero-warm__media" aria-hidden="true" />
+        <div className="hero-warm__veil" aria-hidden="true" />
+        <div className="hero-warm__grain" aria-hidden="true" />
 
-        <div className="shell hero-cinematic__stage">
-          <div className="hero-cinematic__copy">
+        <div className="shell hero-warm__stage">
+          <div className="hero-warm__copy">
+            <div className="hero-warm__eyebrow anim-item" style={{ '--i': 0 } as CSSProperties}>
+              <span className="hero-warm__pulse" aria-hidden="true" />
+              <span>{ui.heroLabelSchool}</span>
+            </div>
             <p
-              className={`hero-cinematic__brand anim-item${isFa ? '' : ' ltr'}`}
-              style={{ '--i': 0 } as CSSProperties}
+              className={`hero-warm__brand anim-item${isFa ? '' : ' ltr'}`}
+              style={{ '--i': 1 } as CSSProperties}
               lang={isFa ? 'fa' : 'en'}
               dir={isFa ? undefined : 'ltr'}
             >
               {brandName}
             </p>
-            <h1 className="anim-item" style={{ '--i': 1 } as CSSProperties}>
+            <h1 className="anim-item" style={{ '--i': 2 } as CSSProperties}>
               {meta.tagline}
             </h1>
-            <p className="hero-cinematic__lead anim-item" style={{ '--i': 2 } as CSSProperties}>
+            <p className="hero-warm__lead anim-item" style={{ '--i': 3 } as CSSProperties}>
               {meta.heroLead}
             </p>
-            <div className="cta-row anim-item" style={{ '--i': 3 } as CSSProperties}>
-              <Link className="btn btn-solid" to="/philosophy">
-                {ui.readPhilosophy}
+            <div className="cta-row hero-warm__actions anim-item" style={{ '--i': 4 } as CSSProperties}>
+              <Link className="btn btn-teal" to="/philosophy">
+                {ui.enterSchool}
               </Link>
-              <Link className="btn btn-ghost" to="/methodology">
-                {ui.workWithAtra}
+              <Link className="btn btn-warm-ghost" to="/whitepaper">
+                {ui.researchCta}
               </Link>
             </div>
           </div>
         </div>
+
+        <div className="hero-warm__scroll anim-item" style={{ '--i': 5 } as CSSProperties} aria-hidden="true">
+          <span className="hero-warm__scroll-line" />
+        </div>
       </section>
+
+      <Reveal as="section" className="school-feature" id="school">
+        <div className="shell school-feature__grid">
+          <div className="school-feature__intro">
+            <span className="label label--warm">{ui.school}</span>
+            <h2>{schoolPillar?.title ?? ui.school}</h2>
+            <p className="school-feature__lead">{schoolPillar?.description}</p>
+          </div>
+          <div className="school-feature__points">
+            <div className="school-point">
+              <span className="school-point__kicker">{ui.schoolForWhom}</span>
+              <p>{schoolPillar?.subtitle}</p>
+            </div>
+            <div className="school-point">
+              <span className="school-point__kicker">{ui.schoolWhatTheyLearn}</span>
+              <p>{meta.ecosystemBody}</p>
+            </div>
+            <div className="school-point">
+              <span className="school-point__kicker">{ui.schoolHowToStart}</span>
+              <p>{ui.schoolStartBody}</p>
+            </div>
+            <div className="cta-row school-feature__cta">
+              <Link className="btn btn-teal" to="/methodology">
+                {ui.exploreFramework}
+              </Link>
+              <Link className="btn btn-warm-outline" to="/philosophy">
+                {ui.learnMore}
+              </Link>
+            </div>
+          </div>
+        </div>
+      </Reveal>
 
       <Reveal as="section" className="mission">
         <div className="shell mission__grid">
@@ -119,23 +155,6 @@ export function HomePage() {
                 </Link>
               </article>
             ))}
-          </div>
-        </div>
-      </Reveal>
-
-      <Reveal as="section" className="school-block" id="school">
-        <div className="shell school-block__prose">
-          <span className="label">{ui.school}</span>
-          <h2>{schoolPillar?.title ?? ui.school}</h2>
-          <p className="school-block__lead">{schoolPillar?.description}</p>
-          <p>{ui.schoolStartBody}</p>
-          <div className="cta-row" style={{ marginTop: '1rem' }}>
-            <Link className="btn btn-solid" to="/methodology">
-              {ui.exploreFramework}
-            </Link>
-            <Link className="btn btn-outline" to="/philosophy">
-              {ui.enterSchool}
-            </Link>
           </div>
         </div>
       </Reveal>
