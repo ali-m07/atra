@@ -1,5 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 
+// Same hashed asset WebGL uses — never depend on /earth-day.jpg alone.
+import earthDayUrl from '../assets/earth-day.jpg'
+
 type GlobeOrbitProps = {
   hint: string
 }
@@ -45,7 +48,8 @@ export function GlobeOrbit({ hint }: GlobeOrbitProps) {
   const shellRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const stateRef = useRef<OrbitState>({
-    yaw: 40,
+    // SphereGeometry maps texture u=0.5 (Africa) to +X; rotate -90° so +X faces the camera.
+    yaw: -90,
     pitch: IDLE_PITCH,
     vx: IDLE_SPIN,
     vy: 0,
@@ -193,6 +197,12 @@ export function GlobeOrbit({ hint }: GlobeOrbitProps) {
         aria-label={hint}
         title={hint}
       >
+        {/* CSS map ball under canvas: if WebGL fails, continents still show (never a solid blue disc). */}
+        <div
+          className="globe-orbit__fallback"
+          aria-hidden="true"
+          style={{ backgroundImage: `url(${earthDayUrl})` }}
+        />
         <div className="globe-orbit__atmosphere" aria-hidden="true" />
         <canvas ref={canvasRef} className="globe-orbit__canvas" aria-hidden="true" />
       </div>

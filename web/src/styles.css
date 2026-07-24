@@ -636,9 +636,9 @@ html[dir='rtl'] .hero-cinematic__brand {
 /* Interactive 3D globe (Three.js canvas) — sized to laptop screen */
 .globe-orbit {
   position: relative;
-  /* Large enough in the bezel that sphere shading / limb foreshortening read */
-  width: 46%;
-  max-width: 13.5rem;
+  /* Larger in the bezel so landmasses read clearly */
+  width: 54%;
+  max-width: 15.5rem;
   aspect-ratio: 1 / 1;
   height: auto;
   flex: 0 0 auto;
@@ -647,7 +647,7 @@ html[dir='rtl'] .hero-cinematic__brand {
   user-select: none;
   -webkit-user-select: none;
   z-index: 2;
-  filter: drop-shadow(0 10px 28px rgba(0, 0, 0, 0.45)) drop-shadow(0 0 36px rgba(80, 140, 255, 0.22));
+  filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.4));
 }
 
 .globe-orbit.is-grabbing,
@@ -659,20 +659,42 @@ html[dir='rtl'] .hero-cinematic__brand {
   animation: none !important;
 }
 
-/* Soft atmospheric halo outside the WebGL sphere */
+/* Visible map if WebGL never paints — continents, not a solid blue disc */
+.globe-orbit__fallback {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+  /* Dark placeholder only; real map comes from inline backgroundImage */
+  background-color: #0a1a30;
+  background-repeat: no-repeat;
+  background-size: 200% 100%;
+  background-position: 18% 48%;
+  box-shadow: inset -14px -10px 28px rgba(0, 12, 28, 0.45);
+  filter: saturate(1.35) contrast(1.18) brightness(1.15);
+}
+
+/* WebGL owns the sphere — hide flat disc so it can't ring the limb in ocean blue */
+.globe-orbit[data-globe-map] .globe-orbit__fallback {
+  opacity: 0;
+}
+
+/* Soft atmospheric halo outside the sphere — rim glow only, not a filled disc */
 .globe-orbit__atmosphere {
   position: absolute;
-  inset: -12%;
+  inset: -8%;
   border-radius: 50%;
   pointer-events: none;
   background:
     radial-gradient(
-      circle at 42% 38%,
-      rgba(140, 190, 255, 0.32) 0%,
-      rgba(60, 110, 200, 0.14) 42%,
-      transparent 68%
+      circle at 50% 50%,
+      transparent 58%,
+      rgba(120, 175, 255, 0.16) 72%,
+      transparent 82%
     );
-  filter: blur(7px);
+  filter: blur(4px);
   z-index: 0;
   animation: globe-atmosphere-breathe 8s var(--ease) infinite;
 }
@@ -680,12 +702,12 @@ html[dir='rtl'] .hero-cinematic__brand {
 @keyframes globe-atmosphere-breathe {
   0%,
   100% {
-    opacity: 0.85;
+    opacity: 0.7;
     transform: scale(1);
   }
   50% {
-    opacity: 1;
-    transform: scale(1.03);
+    opacity: 0.9;
+    transform: scale(1.02);
   }
 }
 
@@ -1103,8 +1125,8 @@ html[dir='rtl'] .arm__kind {
   }
 
   .globe-orbit {
-    width: 44%;
-    max-width: 12.5rem;
+    width: 52%;
+    max-width: 14.5rem;
   }
 
   .hero-cinematic__orb {
@@ -1125,8 +1147,8 @@ html[dir='rtl'] .arm__kind {
   }
 
   .globe-orbit {
-    width: 42%;
-    max-width: 11.75rem;
+    width: 50%;
+    max-width: 13.75rem;
   }
 }
 
@@ -1161,8 +1183,8 @@ html[dir='rtl'] .arm__kind {
   }
 
   .globe-orbit {
-    width: 48%;
-    max-width: 12rem;
+    width: 56%;
+    max-width: 13.5rem;
   }
 
   .hero-cinematic__orb {
@@ -1187,8 +1209,8 @@ html[dir='rtl'] .arm__kind {
   }
 
   .globe-orbit {
-    width: 52%;
-    max-width: 11rem;
+    width: 58%;
+    max-width: 12.5rem;
   }
 
   .hero-cinematic__orb {

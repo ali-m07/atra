@@ -1,7 +1,6 @@
 import {
-  AdditiveBlending,
   AmbientLight,
-  BackSide,
+  CanvasTexture,
   Color,
   DirectionalLight,
   Group,
@@ -9,12 +8,15 @@ import {
   MeshPhongMaterial,
   PerspectiveCamera,
   Scene,
-  ShaderMaterial,
   SphereGeometry,
   SRGBColorSpace,
+  Texture,
   TextureLoader,
   WebGLRenderer,
 } from 'three'
+
+// Bundled via Vite so the map URL is always correct under /atra/ (and locally).
+import earthDayUrl from '../assets/earth-day.jpg'
 
 export type GlobeFrameState = {
   yaw: number
@@ -24,32 +26,7 @@ export type GlobeFrameState = {
   dragging: boolean
 }
 
-const EARTH_MAP = `${import.meta.env.BASE_URL}earth-day.jpg`
 const DEG = Math.PI / 180
-
-const ATMOSPHERE_VERT = /* glsl */ `
-varying vec3 vNormal;
-varying vec3 vViewPos;
-
-void main() {
-  vNormal = normalize(normalMatrix * normal);
-  vec4 mv = modelViewMatrix * vec4(position, 1.0);
-  vViewPos = mv.xyz;
-  gl_Position = projectionMatrix * mv;
-}
-`
-
-const ATMOSPHERE_FRAG = /* glsl */ `
-varying vec3 vNormal;
-varying vec3 vViewPos;
-
-void main() {
-  vec3 viewDir = normalize(-vViewPos);
-  float fresnel = pow(1.0 - abs(dot(viewDir, normalize(vNormal))), 3.2);
-  float alpha = fresnel * 0.92;
-  gl_FragColor = vec4(0.42, 0.72, 1.0, alpha);
-}
-`
 
 type CreateGlobeSceneOptions = {
   canvas: HTMLCanvasElement
@@ -64,6 +41,81 @@ type CreateGlobeSceneOptions = {
   reducedMotion: () => boolean
   wrapDeg: (n: number) => number
   clamp: (n: number, min: number, max: number) => number
+}
+
+/** Hand-drawn equirectangular fallback — land/ocean readable, never a solid blue disc. */
+function createFallbackEarthTexture(): CanvasTexture {
+  const w = 1024
+  const h = 512
+  const c = document.createElement('canvas')
+  c.width = w
+  c.height = h
+  const ctx = c.getContext('2d')
+  if (!ctx) {
+    const tex = new CanvasTexture(c)
+    tex.colorSpace = SRGBColorSpace
+    return tex
+  }
+
+  const ocean = ctx.createLinearGradient(0, 0, 0, h)
+  ocean.addColorStop(0, '#3a7ec4')
+  ocean.addColorStop(0.5, '#2f6eb0')
+  ocean.addColorStop(1, '#3a7ec4')
+  ctx.fillStyle = ocean
+  ctx.fillRect(0, 0, w, h)
+
+  const land = (x: number, y: number, rw: number, rh: number, color: string) => {
+    ctx.fillStyle = color
+    ctx.beginPath()
+    ctx.ellipse(x, y, rw, rh, 0, 0, Math.PI * 2)
+    ctx.fill()
+  }
+
+  const green = '#5f9a4a'
+  const tan = '#c4a46a'
+  const ice = '#e8eef5'
+
+  land(220, 210, 55, 90, green)
+  land(240, 320, 35, 70, green)
+  land(250, 380, 28, 45, tan)
+  land(520, 170, 40, 28, green)
+  land(540, 260, 55, 85, tan)
+  land(555, 320, 35, 55, green)
+  land(700, 180, 110, 55, tan)
+  land(760, 220, 90, 50, green)
+  land(820, 260, 50, 35, green)
+  land(850, 360, 45, 28, tan)
+  land(380, 60, 35, 28, ice)
+  ctx.fillStyle = ice
+  ctx.fillRect(0, 0, w, 28)
+  ctx.fillRect(0, h - 36, w, 36)
+
+  ctx.strokeStyle = 'rgba(255,255,255,0.08)'
+  ctx.lineWidth = 1
+  for (let i = 1; i < 8; i++) {
+    const x = (w / 8) * i
+    ctx.beginPath()
+    ctx.moveTo(x, 0)
+    ctx.lineTo(x, h)
+    ctx.stroke()
+  }
+
+  const tex = new CanvasTexture(c)
+  tex.colorSpace = SRGBColorSpace
+  tex.needsUpdate = true
+  return tex
+}
+
+function applyEarthMap(mat: MeshPhongMaterial, tex: Texture, renderer: WebGLRenderer) {
+  tex.colorSpace = SRGBColorSpace
+  tex.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy())
+  mat.map = tex
+  mat.emissiveMap = tex
+  mat.emissive = new Color(0xffffff)
+  // Mild lift only — high emissive washes oceans into a solid blue disc.
+  mat.emissiveIntensity = 0.14
+  mat.color.set(0xffffff)
+  mat.needsUpdate = true
 }
 
 /**
@@ -85,8 +137,8 @@ export function createGlobeScene({
   clamp,
 }: CreateGlobeSceneOptions): () => void {
   const scene = new Scene()
-  // Frame the full sphere with margin so the circular limb + fresnel read clearly
   const camera = new PerspectiveCamera(40, 1, 0.1, 20)
+  // Must leave margin around the unit sphere or the limb clips to flat edges in the bezel
   camera.position.z = 4.05
 
   const renderer = new WebGLRenderer({
@@ -103,61 +155,67 @@ export function createGlobeScene({
   scene.add(globe)
 
   const geo = new SphereGeometry(1, 96, 96)
+  // Immediate continent map — never a flat solid blue disc while the JPEG loads.
+  const fallbackTex = createFallbackEarthTexture()
   const earthMat = new MeshPhongMaterial({
-    // Slight cool tint; directional lights carry most of the brightness
-    color: new Color(0xd8e4f2),
-    shininess: 22,
-    specular: new Color(0x223344),
+    color: new Color(0xffffff),
+    map: fallbackTex,
+    emissive: new Color(0xffffff),
+    emissiveMap: fallbackTex,
+    emissiveIntensity: 0.12,
+    shininess: 8,
+    specular: new Color(0x1a2430),
   })
   const earth = new Mesh(geo, earthMat)
   globe.add(earth)
 
-  // Limb-only atmosphere (fresnel) — never a filled blue disc
-  const atmoMat = new ShaderMaterial({
-    vertexShader: ATMOSPHERE_VERT,
-    fragmentShader: ATMOSPHERE_FRAG,
-    transparent: true,
-    depthWrite: false,
-    side: BackSide,
-    blending: AdditiveBlending,
-  })
-  const atmo = new Mesh(new SphereGeometry(1.06, 64, 64), atmoMat)
-  globe.add(atmo)
+  // No WebGL fresnel shell — it was reading as a filled blue disc over the map.
+  // Soft rim lives in CSS (.globe-orbit__atmosphere) only.
 
-  // Very low ambient + hard key → terminator / sphere shading is obvious
-  scene.add(new AmbientLight(0x334866, 0.12))
+  // Directional key carries sphere shading; keep ambient moderate so oceans stay ocean.
+  scene.add(new AmbientLight(0xffffff, 0.48))
 
-  const key = new DirectionalLight(0xfff4e6, 2.6)
-  key.position.set(-3.2, 1.8, 2.2)
+  const key = new DirectionalLight(0xfff6e8, 2.35)
+  key.position.set(-2.6, 1.7, 2.4)
   scene.add(key)
 
-  const fill = new DirectionalLight(0x243656, 0.18)
-  fill.position.set(2.8, -1.4, 0.6)
+  const fill = new DirectionalLight(0x9bb4d0, 0.42)
+  fill.position.set(2.4, -1.0, 1.2)
   scene.add(fill)
 
-  const rim = new DirectionalLight(0x79a8ff, 0.85)
-  rim.position.set(0.2, 0.6, -3.2)
+  const rim = new DirectionalLight(0xc8dcff, 0.2)
+  rim.position.set(0.1, 0.35, -3.0)
   scene.add(rim)
 
   let disposed = false
   const loader = new TextureLoader()
-  loader.load(
-    EARTH_MAP,
-    (tex) => {
-      if (disposed) {
-        tex.dispose()
-        return
-      }
-      tex.colorSpace = SRGBColorSpace
-      tex.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy())
-      earthMat.map = tex
-      earthMat.needsUpdate = true
-    },
-    undefined,
-    () => {
-      earthMat.color.set(0x1a4a8a)
-    },
-  )
+
+  const tryLoad = (url: string, onFail: () => void) => {
+    loader.load(
+      url,
+      (tex) => {
+        if (disposed) {
+          tex.dispose()
+          return
+        }
+        const prev = earthMat.map
+        applyEarthMap(earthMat, tex, renderer)
+        if (prev === fallbackTex) fallbackTex.dispose()
+        else if (prev && prev !== tex) prev.dispose()
+        shell.dataset.globeMap = 'photo'
+      },
+      undefined,
+      () => onFail(),
+    )
+  }
+
+  // Bundled Vite URL first (hashed under /atra/assets/), then public copy.
+  shell.dataset.globeMap = 'fallback'
+  tryLoad(earthDayUrl, () => {
+    tryLoad(`${import.meta.env.BASE_URL}earth-day.jpg`, () => {
+      shell.dataset.globeMap = 'fallback'
+    })
+  })
 
   const resize = () => {
     const w = shell.clientWidth
@@ -202,10 +260,13 @@ export function createGlobeScene({
     cancelAnimationFrame(raf)
     ro.disconnect()
     geo.dispose()
-    atmo.geometry.dispose()
-    earthMat.map?.dispose()
+    const map = earthMat.map
+    const emissiveMap = earthMat.emissiveMap
+    earthMat.map = null
+    earthMat.emissiveMap = null
+    map?.dispose()
+    if (emissiveMap && emissiveMap !== map) emissiveMap.dispose()
     earthMat.dispose()
-    atmoMat.dispose()
     renderer.dispose()
   }
 }
