@@ -1,24 +1,19 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { Header, Footer } from './components/Layout'
-import { HomePage } from './pages/HomePage'
-import { ContentPage } from './pages/ContentPage'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { LocaleProvider } from './locale/LocaleContext'
+import { Footer, Header } from './components/Layout'
+import { HomePage } from './pages/HomePage'
+import { AboutPage, ArticlesPage, ContactPage, CoursesPage, DashboardPage, FreeContentPage, LoginPage, NotFoundPage, PodcastsPage, RegisterPage } from './pages/PortalPages'
 
 export default function App() {
-  return (
-    <LocaleProvider>
-      <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, '') || '/'}>
-        <Header />
-        <main>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/philosophy" element={<ContentPage slug="philosophy" />} />
-            <Route path="/methodology" element={<ContentPage slug="methodology" />} />
-            <Route path="/whitepaper" element={<ContentPage slug="whitepaper" />} />
-          </Routes>
-        </main>
-        <Footer />
-      </BrowserRouter>
-    </LocaleProvider>
-  )
+  return <LocaleProvider><BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, '') || '/'}>
+    <a className="skip-link" href="#main">رفتن به محتوای اصلی</a><Header />
+    <main id="main"><Routes>
+      <Route path="/" element={<HomePage />} /><Route path="/about" element={<AboutPage />} />
+      <Route path="/articles" element={<ArticlesPage />} /><Route path="/podcasts" element={<PodcastsPage />} />
+      <Route path="/courses" element={<CoursesPage />} /><Route path="/dashboard" element={<DashboardPage />} />
+      <Route path="/login" element={<LoginPage />} /><Route path="/register" element={<RegisterPage />} />
+      <Route path="/free" element={<FreeContentPage />} /><Route path="/contact" element={<ContactPage />} />
+      <Route path="*" element={<NotFoundPage />} />
+    </Routes></main><Footer />
+  </BrowserRouter></LocaleProvider>
 }

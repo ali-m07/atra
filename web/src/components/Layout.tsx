@@ -1,115 +1,15 @@
 import { useEffect, useState } from 'react'
-import { NavLink, Link, useLocation } from 'react-router-dom'
-import { LanguageSwitcher } from './LanguageSwitcher'
+import { Link, NavLink, useLocation } from 'react-router-dom'
 import { LogoMark } from './Logo'
-import { useLocale } from '../locale/LocaleContext'
 
-export function Header() {
-  const [open, setOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
-  const { ui, isFa } = useLocale()
-  const { pathname } = useLocation()
-  const brandName = isFa ? 'آترا' : 'Atra'
-  const onHome = pathname === '/'
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 28)
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
-
-  useEffect(() => {
-    setOpen(false)
-  }, [pathname])
-
-  const links = [
-    { to: '/philosophy', label: ui.philosophy },
-    { to: '/methodology', label: ui.framework },
-    { to: '/whitepaper', label: ui.whitepaper },
-  ]
-
-  const headerClass = [
-    'site-header',
-    onHome ? 'site-header--home' : '',
-    onHome && !scrolled && !open ? 'site-header--transparent' : 'site-header--solid',
-    scrolled || open ? 'is-scrolled' : '',
-  ]
-    .filter(Boolean)
-    .join(' ')
-
-  return (
-    <header className={headerClass}>
-      <div className="shell site-header__inner">
-        <Link to="/" className="brand" onClick={() => setOpen(false)} lang={isFa ? 'fa' : 'en'}>
-          <LogoMark className="brand__mark" title={brandName} />
-          <span className={`brand__text${isFa ? '' : ' ltr'}`} dir={isFa ? undefined : 'ltr'}>
-            {brandName}
-          </span>
-        </Link>
-
-        <nav id="site-nav" className={`nav${open ? ' is-open' : ''}`}>
-          {links.map((link) => (
-            <NavLink
-              key={link.to}
-              to={link.to}
-              className={({ isActive }) => (isActive ? 'active' : undefined)}
-              onClick={() => setOpen(false)}
-            >
-              {link.label}
-            </NavLink>
-          ))}
-          <Link to="/methodology" className="nav-cta" onClick={() => setOpen(false)}>
-            {ui.workWithAtra}
-          </Link>
-        </nav>
-
-        <div className="header-actions">
-          <LanguageSwitcher />
-          <button
-            type="button"
-            className="menu-toggle"
-            aria-expanded={open}
-            aria-controls="site-nav"
-            onClick={() => setOpen((v) => !v)}
-          >
-            {ui.menu}
-          </button>
-        </div>
-      </div>
-    </header>
-  )
+const links = [['/','خانه'],['/about','درباره ما'],['/articles','مقالات'],['/podcasts','پادکست‌ها'],['/courses','دوره‌ها'],['/contact','تماس']]
+export function Header(){
+  const [open,setOpen]=useState(false); const {pathname}=useLocation();
+  useEffect(()=>setOpen(false),[pathname])
+  return <header className="site-header"><div className="shell header-inner">
+    <Link className="brand" to="/"><LogoMark className="brand-mark" title="آترا"/><span><b>آترا</b><small>مدرسه و اندیشکده آینده</small></span></Link>
+    <nav className={open?'nav open':'nav'} aria-label="منوی اصلی">{links.map(([to,label])=><NavLink key={to} to={to} end={to==='/' }>{label}</NavLink>)}<Link className="nav-login" to="/login">ورود</Link></nav>
+    <div className="header-actions"><Link className="button small" to="/register">ثبت‌نام در دوره</Link><button className="menu-toggle" onClick={()=>setOpen(v=>!v)} aria-expanded={open} aria-label="نمایش منو">{open?'×':'☰'}</button></div>
+  </div></header>
 }
-
-export function Footer() {
-  const { ui, isFa } = useLocale()
-  const brandName = isFa ? 'آترا' : 'Atra'
-
-  return (
-    <footer className="site-footer">
-      <div className="shell site-footer__inner">
-        <div>
-          <div className="brand brand--footer" lang={isFa ? 'fa' : 'en'}>
-            <LogoMark className="brand__mark" title={brandName} />
-            <span className={`brand__text${isFa ? '' : ' ltr'}`} dir={isFa ? undefined : 'ltr'}>
-              {brandName}
-            </span>
-          </div>
-          <p>{ui.footerBlurb}</p>
-        </div>
-        <div className="footer-meta">
-          <a
-            className="ltr"
-            href="https://x.com/atra_futures"
-            target="_blank"
-            rel="noreferrer"
-            dir="ltr"
-            lang="en"
-          >
-            @atra_futures
-          </a>
-        </div>
-      </div>
-    </footer>
-  )
-}
+export function Footer(){return <footer className="site-footer"><div className="shell footer-grid"><div><Link className="brand footer-brand" to="/"><LogoMark className="brand-mark" title="آترا"/><span><b>آترا</b><small>فهم بهتر امروز، ساختن فردای بهتر</small></span></Link><p>مدرسه و اندیشکده‌ای برای یادگیری تفکر سیستمی، آینده‌پژوهی و تصمیم‌گیری آگاهانه.</p></div><div><h3>مسیرهای اصلی</h3><Link to="/courses">دوره‌ها</Link><Link to="/articles">مقالات</Link><Link to="/free">محتوای رایگان</Link></div><div><h3>ارتباط</h3><a href="mailto:hello@atra.school">hello@atra.school</a><a href="tel:+989378011428">۰۹۳۷۸۰۱۱۴۲۸</a><span className="socials"><a href="https://t.me/atra_futures">تلگرام</a><a href="https://www.linkedin.com">لینکدین</a></span></div></div><div className="shell footer-bottom"><span>© ۱۴۰۵ آترا</span><span><a href="/privacy">حریم خصوصی</a> · <a href="/terms">قوانین استفاده</a></span></div></footer>}
