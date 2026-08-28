@@ -4,14 +4,14 @@ func metaEN() SiteMeta {
 	return SiteMeta{
 		Lang:    string(LangEN),
 		Brand:   "Atra",
-		Tagline: "Structure creates behavior.",
+		Tagline: "Make thinking easier.",
 		Handle:  "@atra_futures",
 		Founder: "",
 		Tags:    nil,
-		Name: sharedName("In interpretive usage, Atra has been linked with spark and fire. That is background etymology for the institute name, not a headline claim. Atra is a cognitive laboratory for system dynamics and strategic foresight."),
-		HeroLead:      "Atra is a cognitive laboratory for system dynamics and strategic foresight. Absolute randomness barely exists in complex systems; what we call accident is usually an admission of ignorance about structure. Structural literacy is built here.",
+		Name: sharedName("In interpretive usage, Atra has been linked with spark and fire. That is background etymology for the institute name, not a headline claim. Atra is a cognitive laboratory that teaches how to think."),
+		HeroLead:      "Atra began with one idea: we think hard so we can teach easier thinking. In a world where performing knowledge has replaced understanding, curiosity, three-layer cognition, and decision-making under uncertainty are built here.",
 		WelcomeLead:   "Why Atra exists",
-		WelcomeBody:   "Governments, cities, and organizations fail less from scarce data than from structural illiteracy. Atra investigates feedback, delays, and mental models that lock systems into failure. The work is independent, methodical, and built for people who decide under pressure, not for decorative strategy theater.",
+		WelcomeBody:   "A society without appetite for discovery displays words and quotes to protect a cheap identity. Atra is for people who want to move past performing thought and find the courage to say I do not know. Structural analysis, foresight, and education — not for show, but to shift how you see.",
 		EcosystemLead: "Think tank, school, laboratory",
 		EcosystemBody: "Three arms, one project. The think tank publishes independent structural research. The school teaches system dynamics and foresight methods to children and adults. The laboratory builds frameworks and redesign with organizations that need the analysis to leave the page. Work with Atra means structural diagnostics and clear redesign paths.",
 		ManifestoLead: "We do not optimize broken systems.",
@@ -55,6 +55,22 @@ func philosophyEN() Page {
 				Body:  "We treat that association as background meaning, not as marketing slogan. The institute's public work is research, education, and laboratory practice for complex systems.",
 			},
 			{
+				Title:   "Performing Knowledge vs. Curiosity",
+				Variant: "cognitive",
+				Lead:    "We live in a world where performing knowledge has replaced understanding.",
+				Body:    "People display words, books, and quotes to hide an identity they cannot afford to lose. Real curiosity needs no proof and is not afraid to admit I do not know. Awakening happens when we stop swapping display rulers and let understanding occur — not to impress others, but to genuinely shift our angle of view.",
+			},
+			{
+				Title:   "Three Layers of Thought",
+				Variant: "cognitive",
+				Lead:    "The biggest trap on the path of cognitive growth is mistaking defending beliefs for real thinking.",
+				Bullets: []Bullet{
+					{Label: "Layer 1 — Reactive robot", Text: "Emotional reactions to environmental signals without critical assessment. A black-and-white world; every opposing idea is a biological threat."},
+					{Label: "Layer 2 — Self-appointed hero", Text: "Rebellion against blind imitation — but attachment to a single angle and inability to digest paradoxes."},
+					{Label: "Layer 3 — Mind architecture", Text: "Holding contradictory ideas, suspending judgment, and fluidly changing analytical lenses. Architect of your own decision processes."},
+				},
+			},
+			{
 				Title: "Institutional Model",
 				Body:  "Think Tank: independent structural research. School: futures and system-dynamics literacy for children and adults. Laboratory: frameworks and redesign that leave the page. One intellectual project, the same analysis that cuts urban, economic, and governance cases.",
 			},
@@ -72,7 +88,7 @@ func philosophyEN() Page {
 				Body:  "Organizations and societies fail less from scarce resources than from structural illiteracy. Atra strips short-term noise and exposes the architecture of reality. Redesign from the root, or accept predictable collapse.",
 			},
 		},
-		Closing: "Independent foresight. Systemic redesign.",
+		Closing: "Real curiosity. Three-layer thought. Systemic redesign.",
 	}
 }
 
@@ -94,6 +110,29 @@ func methodologyEN() Page {
 					{Label: "Balancing loops (B)", Text: "Constraints that try to stabilize behavior, and where delayed regulation fails."},
 					{Label: "Delay analysis", Text: "Temporal gaps that create false signals for decision-makers."},
 				},
+			},
+			{
+				Title:   "Signal vs. Noise",
+				Variant: "signal",
+				Lead:    "When data is unstable, the challenge is not scarcity — it is that everything arrives at equal volume.",
+				Body:    "Instead of asking which headline is true, ask: if this data is true, which decision I make today becomes meaningless?",
+				Bullets: []Bullet{
+					{Label: "Real novelty", Text: "Has a new variable entered the map?"},
+					{Label: "Convergence", Text: "Does it align with other weak signals?"},
+					{Label: "Cost of ignoring", Text: "If neglected, which paths close?"},
+				},
+			},
+			{
+				Title:   "Living with Multiple Futures",
+				Variant: "scenario",
+				Lead:    "Most decisions assume tomorrow continues today's line.",
+				Body:    "Scenario work is not better prediction; it stress-tests today's choices across parallel worlds — from deep crisis to limited opening. When rules keep changing, the art is keeping several paths alive at once.",
+			},
+			{
+				Title:   "Low-Regret Decisions",
+				Variant: "scenario",
+				Lead:    "The hardest part of deciding under uncertainty is how fast information goes stale.",
+				Body:    "The exit: choices that minimize damage even in worst cases and preserve the right to pivot. Small experiments, multi-purpose skills, and never locking all resources into one bet.",
 			},
 			{
 				Title: "Paradigm & Mental Model Diagnostics",

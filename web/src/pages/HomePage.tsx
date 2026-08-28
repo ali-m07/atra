@@ -5,6 +5,8 @@ import type { SiteMeta } from '../types'
 import { useLocale } from '../locale/LocaleContext'
 import { Reveal } from '../components/Reveal'
 import { HeroSystems } from '../components/HeroSystems'
+import { InsightsStrip } from '../components/InsightsStrip'
+import { CounselorBlock } from '../components/CounselorBlock'
 
 export function HomePage() {
   const { locale, ui, isFa } = useLocale()
@@ -96,9 +98,11 @@ export function HomePage() {
       <Reveal as="section" className="mission">
         <div className="shell mission__grid">
           <h2>{meta.welcomeLead}</h2>
-          <p>{meta.welcomeBody}</p>
+          <p className="prose">{meta.welcomeBody}</p>
         </div>
       </Reveal>
+
+      <InsightsStrip />
 
       <Reveal as="section" className="block">
         <div className="shell">
@@ -128,17 +132,19 @@ export function HomePage() {
           <span className="label">{ui.school}</span>
           <h2>{schoolPillar?.title ?? ui.school}</h2>
           <p className="school-block__lead">{schoolPillar?.description}</p>
-          <p>{ui.schoolStartBody}</p>
+          <p className="prose">{ui.schoolStartBody}</p>
           <div className="cta-row" style={{ marginTop: '1rem' }}>
-            <Link className="btn btn-solid" to="/methodology">
+            <a className="btn btn-solid" href="#counseling">
+              {ui.counselingCta}
+            </a>
+            <Link className="btn btn-outline" to="/methodology">
               {ui.exploreFramework}
-            </Link>
-            <Link className="btn btn-outline" to="/philosophy">
-              {ui.enterSchool}
             </Link>
           </div>
         </div>
       </Reveal>
+
+      <CounselorBlock />
 
       <Reveal as="section" className="mandate">
         <div className="shell mandate__grid">

@@ -25,6 +25,7 @@ type Pillar struct {
 
 type SectionBlock struct {
 	Title   string   `json:"title"`
+	Variant string   `json:"variant,omitempty"`
 	Lead    string   `json:"lead,omitempty"`
 	Bullets []Bullet `json:"bullets,omitempty"`
 	Body    string   `json:"body,omitempty"`

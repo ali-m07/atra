@@ -2,6 +2,8 @@ import { useEffect, useState, type CSSProperties } from 'react'
 import { api } from '../api'
 import type { Page } from '../types'
 import { useLocale } from '../locale/LocaleContext'
+import { ContentSection } from '../components/content/ContentSection'
+import { SectionDivider } from '../components/content/SectionDivider'
 import { Reveal } from '../components/Reveal'
 
 type Props = {
@@ -52,16 +54,16 @@ export function ContentPage({ slug }: Props) {
   }
 
   return (
-    <div className={`page-motion${ready ? ' is-ready' : ''}`}>
+    <div className={`page-motion content-page${ready ? ' is-ready' : ''}`}>
       <header className="page-hero">
-        <div className="shell">
+        <div className="shell page-hero__inner">
           <span className="page-hero__eyebrow anim-item" style={{ '--i': 0 } as CSSProperties}>
             {page.title}
           </span>
           <h1 className="anim-item" style={{ '--i': 1 } as CSSProperties}>
             {page.headline}
           </h1>
-          <p className="anim-item" style={{ '--i': 2 } as CSSProperties}>
+          <p className="page-hero__lead anim-item prose" style={{ '--i': 2 } as CSSProperties}>
             {page.lead}
           </p>
         </div>
@@ -69,34 +71,26 @@ export function ContentPage({ slug }: Props) {
 
       <div className="shell content-stack">
         {page.sections.map((section, i) => (
-          <Reveal key={section.title} as="section" className="content-block" delay={i * 40}>
-            <h2>{section.title}</h2>
-            <div>
-              {section.lead ? <p className="lead">{section.lead}</p> : null}
-              {section.body ? <p className="body">{section.body}</p> : null}
-              {section.bullets?.length ? (
-                <ul className="bullet-list">
-                  {section.bullets.map((bullet) => (
-                    <li key={bullet.label}>
-                      <strong>{bullet.label}</strong>
-                      <p>{bullet.text}</p>
-                    </li>
-                  ))}
-                </ul>
-              ) : null}
-            </div>
-          </Reveal>
+          <div key={section.title}>
+            {i > 0 ? <SectionDivider /> : null}
+            <ContentSection section={section} index={i} />
+          </div>
         ))}
 
         {page.closing ? (
-          <Reveal>
-            <p className="closing-band">{page.closing}</p>
-          </Reveal>
+          <>
+            <SectionDivider label={ui.sectionDivider} />
+            <Reveal>
+              <blockquote className="cognitive-quote">
+                <p>{page.closing}</p>
+              </blockquote>
+            </Reveal>
+          </>
         ) : null}
 
         {page.handle ? (
           <Reveal delay={60}>
-            <p>
+            <p className="content-handle">
               <bdi className="ltr" dir="ltr" lang="en">
                 {page.handle}
               </bdi>

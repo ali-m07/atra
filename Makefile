@@ -1,4 +1,4 @@
-.PHONY: api web build serve
+.PHONY: api web build serve deploy-arvan
 
 api:
 	cd server && go run ./cmd/atra
@@ -12,3 +12,6 @@ build:
 
 serve: build
 	cd server && ATRA_STATIC=../web/dist ./atra
+
+deploy-arvan:
+	powershell -ExecutionPolicy Bypass -File scripts/deploy-arvan.ps1

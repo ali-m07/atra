@@ -10,8 +10,11 @@ export type Bullet = {
   text: string
 }
 
+export type SectionVariant = 'default' | 'cognitive' | 'scenario' | 'signal' | 'prose'
+
 export type SectionBlock = {
   title: string
+  variant?: SectionVariant
   lead?: string
   bullets?: Bullet[]
   body?: string

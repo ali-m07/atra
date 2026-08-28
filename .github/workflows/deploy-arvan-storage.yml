@@ -1,0 +1,70 @@
+name: Build and deploy to ArvanCloud Storage
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: arvan-storage-production
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.ARVAN_ACCESS_KEY }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.ARVAN_SECRET_KEY }}
+      AWS_DEFAULT_REGION: us-east-1
+      ARVAN_BUCKET: ${{ vars.ARVAN_BUCKET }}
+      ARVAN_S3_ENDPOINT: ${{ vars.ARVAN_S3_ENDPOINT }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+          cache-dependency-path: server/go.sum
+
+      - name: Export static content from Go
+        working-directory: server
+        run: go run ./cmd/exportcontent "$(pwd)/../web/public/content"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: Install and build
+        working-directory: web
+        env:
+          VITE_STATIC: 'true'
+        run: |
+          npm ci
+          npm run build
+
+      - name: Upload versioned assets
+        if: ${{ env.AWS_ACCESS_KEY_ID != '' && env.AWS_SECRET_ACCESS_KEY != '' && env.ARVAN_BUCKET != '' }}
+        run: >-
+          aws s3 sync web/dist "s3://${ARVAN_BUCKET}"
+          --endpoint-url "${ARVAN_S3_ENDPOINT}"
+          --delete
+          --exclude "*.html"
+          --cache-control "public,max-age=604800"
+
+      - name: Upload HTML without long-term cache
+        if: ${{ env.AWS_ACCESS_KEY_ID != '' && env.AWS_SECRET_ACCESS_KEY != '' && env.ARVAN_BUCKET != '' }}
+        run: >-
+          aws s3 cp web/dist "s3://${ARVAN_BUCKET}"
+          --endpoint-url "${ARVAN_S3_ENDPOINT}"
+          --recursive
+          --exclude "*"
+          --include "*.html"
+          --content-type "text/html; charset=utf-8"
+          --cache-control "no-cache, no-store, must-revalidate"

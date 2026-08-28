@@ -23,6 +23,38 @@
       ]
     },
     {
+      "title": "Signal vs. Noise",
+      "variant": "signal",
+      "lead": "When data is unstable, the challenge is not scarcity — it is that everything arrives at equal volume.",
+      "body": "Instead of asking which headline is true, ask: if this data is true, which decision I make today becomes meaningless?",
+      "bullets": [
+        {
+          "label": "Real novelty",
+          "text": "Has a new variable entered the map?"
+        },
+        {
+          "label": "Convergence",
+          "text": "Does it align with other weak signals?"
+        },
+        {
+          "label": "Cost of ignoring",
+          "text": "If neglected, which paths close?"
+        }
+      ]
+    },
+    {
+      "title": "Living with Multiple Futures",
+      "variant": "scenario",
+      "lead": "Most decisions assume tomorrow continues today's line.",
+      "body": "Scenario work is not better prediction; it stress-tests today's choices across parallel worlds — from deep crisis to limited opening. When rules keep changing, the art is keeping several paths alive at once."
+    },
+    {
+      "title": "Low-Regret Decisions",
+      "variant": "scenario",
+      "lead": "The hardest part of deciding under uncertainty is how fast information goes stale.",
+      "body": "The exit: choices that minimize damage even in worst cases and preserve the right to pivot. Small experiments, multi-purpose skills, and never locking all resources into one bet."
+    },
+    {
       "title": "Paradigm & Mental Model Diagnostics",
       "lead": "Systems run on the mental models of their designers. We interrogate those assumptions.",
       "bullets": [

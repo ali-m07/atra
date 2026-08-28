@@ -10,6 +10,31 @@
       "body": "We treat that association as background meaning, not as marketing slogan. The institute's public work is research, education, and laboratory practice for complex systems."
     },
     {
+      "title": "Performing Knowledge vs. Curiosity",
+      "variant": "cognitive",
+      "lead": "We live in a world where performing knowledge has replaced understanding.",
+      "body": "People display words, books, and quotes to hide an identity they cannot afford to lose. Real curiosity needs no proof and is not afraid to admit I do not know. Awakening happens when we stop swapping display rulers and let understanding occur — not to impress others, but to genuinely shift our angle of view."
+    },
+    {
+      "title": "Three Layers of Thought",
+      "variant": "cognitive",
+      "lead": "The biggest trap on the path of cognitive growth is mistaking defending beliefs for real thinking.",
+      "bullets": [
+        {
+          "label": "Layer 1 — Reactive robot",
+          "text": "Emotional reactions to environmental signals without critical assessment. A black-and-white world; every opposing idea is a biological threat."
+        },
+        {
+          "label": "Layer 2 — Self-appointed hero",
+          "text": "Rebellion against blind imitation — but attachment to a single angle and inability to digest paradoxes."
+        },
+        {
+          "label": "Layer 3 — Mind architecture",
+          "text": "Holding contradictory ideas, suspending judgment, and fluidly changing analytical lenses. Architect of your own decision processes."
+        }
+      ]
+    },
+    {
       "title": "Institutional Model",
       "body": "Think Tank: independent structural research. School: futures and system-dynamics literacy for children and adults. Laboratory: frameworks and redesign that leave the page. One intellectual project, the same analysis that cuts urban, economic, and governance cases."
     },
@@ -36,7 +61,7 @@
       "body": "Organizations and societies fail less from scarce resources than from structural illiteracy. Atra strips short-term noise and exposes the architecture of reality. Redesign from the root, or accept predictable collapse."
     }
   ],
-  "closing": "Independent foresight. Systemic redesign.",
+  "closing": "Real curiosity. Three-layer thought. Systemic redesign.",
   "handle": "@atra_futures",
   "lang": "en"
 }

@@ -42,6 +42,27 @@ Push to `main` deploys the Vite build via Actions to:
 
 Pages serves static files only. Content is exported from the Go package into `web/public/content/` at build time (`VITE_STATIC=true`). The live Go API is not required for the Pages site. To point the frontend at a hosted API later, set `VITE_API_URL` in the workflow.
 
+### ArvanCloud Object Storage
+
+Each push to `main` also runs `.github/workflows/deploy-arvan-storage.yml`, which builds the site and syncs `web/dist/` to Arvan Object Storage. GitHub Pages and Arvan deploy independently; a failure in one does not block the other.
+
+For manual deploy from Windows (e.g. during internet outages), see [`OFFLINE-DEPLOY.md`](./OFFLINE-DEPLOY.md) or run:
+
+```powershell
+make deploy-arvan
+```
+
+Configure these in GitHub Repository settings:
+
+| Type | Name | Value |
+| --- | --- | --- |
+| Secret | `ARVAN_ACCESS_KEY` | Access Key فضای ابری |
+| Secret | `ARVAN_SECRET_KEY` | Secret Key فضای ابری |
+| Variable | `ARVAN_BUCKET` | e.g. `atra-site` |
+| Variable | `ARVAN_S3_ENDPOINT` | `https://s3.ir-thr-at1.arvanstorage.ir` |
+
+Until `ARVAN_BUCKET` is set, the Arvan upload steps are skipped safely.
+
 ## API
 
 | Endpoint | Description |
