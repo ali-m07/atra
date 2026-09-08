@@ -1,12 +1,14 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import { LocaleProvider } from './locale/LocaleContext'
+import { LocaleProvider, useLocale } from './locale/LocaleContext'
 import { Footer, Header } from './components/Layout'
 import { HomePage } from './pages/HomePage'
 import { AboutPage, ArticlesPage, ContactPage, CoursesPage, DashboardPage, FreeContentPage, LoginPage, NotFoundPage, PodcastsPage, RegisterPage } from './pages/PortalPages'
 
+function SkipLink(){const {isFa}=useLocale();return <a className="skip-link" href="#main">{isFa?'رفتن به محتوای اصلی':'Skip to main content'}</a>}
+
 export default function App() {
   return <LocaleProvider><BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, '') || '/'}>
-    <a className="skip-link" href="#main">رفتن به محتوای اصلی</a><Header />
+    <SkipLink /><Header />
     <main id="main"><Routes>
       <Route path="/" element={<HomePage />} /><Route path="/about" element={<AboutPage />} />
       <Route path="/articles" element={<ArticlesPage />} /><Route path="/podcasts" element={<PodcastsPage />} />
